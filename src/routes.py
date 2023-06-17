@@ -28,14 +28,29 @@ def signup():
         db.session.rollback()
         return jsonify(message=e), 200
     
+@api.route('login', methods=['POST'])
+def login():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email=email).first()
+    if user is None or not user.check_password(password):
+        return jsonify({"msg": "Incorrect email or password"}, 401)
+
+    return jsonify(message='You have successfully logged in.')
+
+@api.route('logout', methods=['POST','GET'])
+def logout():
+    return jsonify(message='You have successfully logged out.')
+    
 # @api.route('/login', methods=['POST'])
 # def login():
 #     email = request.json.get("email", None)
 #     password = request.json.get("password", None)
 
-#     user = User.query.filter_by(email=email),first()
-#     if user is None or not user.check_password(password):
-#         return jsonify({"msg": "Incorrect email or password"}, 401)
+    # user = User.query.filter_by(email=email),first()
+    # if user is None or not user.check_password(password):
+    #     return jsonify({"msg": "Incorrect email or password"}, 401)
 
 #         access_token = create_access_token(identify=email)
 #         return jsonify(access_token=access_token)
