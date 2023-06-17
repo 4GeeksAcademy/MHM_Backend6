@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
+# from flask_jwt_extended import JWTManager
 from admin import setup_admin
 from models import db, User
 from routes import api
@@ -28,6 +29,8 @@ CORS(app)
 setup_admin(app)
 
 app.register_blueprint(api, url_prefix='/api')
+
+# jwt = JWTManager(app)
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
