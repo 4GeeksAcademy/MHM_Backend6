@@ -9,7 +9,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.email
 
     def serialize(self):
         return {
@@ -39,47 +39,44 @@ class User(db.Model):
 #       "user": self.user
 #     }
   
-# class MentalHealthResources (db.Model):
-#   __tablename__ = 'mental_health_resources'
-#   resource_id = db.Column(db.Integer, primary_key=True)
-#   title = db.Column(db.String(255), nullable=False)
-#   description = db.Column(db.Text)
-#   type = db.Column(db.String(255))
-#   url = db.Column(db.String(255))
+class MentalHealthResources (db.Model):
+  resource_id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(255), nullable=False)
+  description = db.Column(db.Text)
+  type = db.Column(db.String(255))
+  url = db.Column(db.String(255))
 
-#   def __repr__(self):
-#     return f'<MentalHealthResources {self.resource}>'
+  def __repr__(self):
+    return f'<MentalHealthResources {self.title}>'
 
-#   def serialize(self):
-#     return {
-#       "resource_id": self.resource_id,
-#       "title": self.title,
-#       "description": self.description,
-#       "type": self.type,
-#       "url": self.url,
-#     }
+  def serialize(self):
+    return {
+      "resource_id": self.resource_id,
+      "title": self.title,
+      "description": self.description,
+      "type": self.type,
+      "url": self.url,
+    }
   
-# class MeditationSessions (db.Model):
-#   __tablename__ = 'meditation_sessions'
-#   session_id = db.Column(db.Integer, primary_key=True)
-#   title = db.Column(db.String(255), nullable=False)
-#   duration = db.Column(db.Integer)
-#   style = db.Column(db.String(255))
-#   theme = db.Column(db.String(255))
-#   youtube_url = db.Column(db.String(255))
+class MeditationSessions (db.Model):
+  __tablename__ = 'meditation_sessions'
+  session_id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(255), nullable=False)
+  style = db.Column(db.String(255))
+  theme = db.Column(db.String(255))
+  youtube_url = db.Column(db.String(255))
 
-#   def __repr__(self):
-#     return f'<MeditationSessions {self.title}>'
+  def __repr__(self):
+    return f'<MeditationSessions {self.title}>'
 
-#   def serialize(self):
-#     return {
-#       "session_id": self.session_id,
-#       "title": self.title,
-#       "duration": self.duration,
-#       "style": self.style,
-#       "theme": self.theme,
-#       "youtube_url": self.youtube_url
-#     }
+  def serialize(self):
+    return {
+      "session_id": self.session_id,
+      "title": self.title,
+      "style": self.style,
+      "theme": self.theme,
+      "youtube_url": self.youtube_url
+    }
   
 # class SupportGroups (db.Model):
 #   __tablename__ = 'support_groups'
