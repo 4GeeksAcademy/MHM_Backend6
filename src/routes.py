@@ -26,16 +26,17 @@ def signup():
         db.session.rollback()
         return jsonify(message=e), 200
     
-@api.route('login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
+    email = request.json.get("email")
+    password = request.json.get("password")
 
     user = User.query.filter_by(email=email).first()
-    if user is None or not user.check_password(password):
-        return jsonify({"msg": "Incorrect email or password"}, 401)
+    if not user or not user.check_password(password):
+        return jsonify({"message": "Incorrect email or password"}), 401
 
-    return jsonify(message='You have successfully logged in.')
+    return jsonify({"message": "You have successfully logged in."}), 200
+
     
 #         access_token = create_access_token(identify=email)
 #         return jsonify(access_token=access_token)
@@ -56,10 +57,10 @@ def logout():
 def resource():
     get_resource=request.get_json()
     title=get_resource["title"]
-    # description=get_resource["description"]
-    # type=get_resource["type"]
-    # url=get_resource["url"]
-    # resource=MentalHealthResources.query.filter_by(title=title).first()
+    description=get_resource["description"]
+    type=get_resource["type"]
+    url=get_resource["url"]
+    resource=MentalHealthResources.query.filter_by(title=title).first()
 
     new_resource=MentalHealthResources(title=get_resource["title"])
                                        
@@ -71,13 +72,25 @@ def resource():
 def meditation():
     get_session=request.get_json()
     title=get_session["title"]
-    # style=get_meditation["style"]
-    # theme=get_resource["theme"]
-    # youtube_url=get_resource["youtube_url"]
-    # meditation=MeditationSessions.query.filter_by(title=title).first()
+    style=get_session["style"]
+    theme=get_session["theme"]
+    youtube_url=get_session["youtube_url"]
+    meditation=MeditationSessions.query.filter_by(title=title).first()
 
     new_session=MeditationSessions(title=get_session["title"])
                                        
     db.session.add(new_session)
     db.session.commit()
     return jsonify(message='Your session is ready.'), 200
+
+# @api.route('/journal', methods=['POST'])
+# def journal_entries():
+#     get_entry = request.get_json()
+#     mood = get_entry["mood"]
+#     content = get_entry["content"]
+
+#     new_entry = JournalEntries(mood=mood, content=content)
+
+#     db.session.add(new_entry)
+#     db.session.commit()
+#     return jsonify(message='Your new entry is available'), 200

@@ -21,7 +21,6 @@ class User(db.Model):
 # class JournalEntries (db.Model):
 #   __tablename__ = 'journal_entries'
 #   entry_id = db.Column(db.Integer, primary_key=True)
-#   user_id = db.Column(db.Integer)
 #   date = db.Column(db.Date, nullable=False)
 #   mood = db.Column(db.String(255))
 #   content = db.Column(db.Text)
@@ -32,11 +31,9 @@ class User(db.Model):
 #   def serialize(self):
 #     return {
 #       "entry_id": self.entry_id,
-#       "user_id": self.user_id,
 #       "date": self.date,
 #       "mood": self.mood,
-#       "content": self.content,
-#       "user": self.user
+#       "content": self.content
 #     }
   
 class MentalHealthResources (db.Model):
