@@ -1,7 +1,8 @@
 import os  
 from flask import Flask ,request, jsonify, Blueprint 
 # from flask_jwt_extended import create_access_token, get_jwt_identify, jwt_required 
-from models import db, User, MentalHealthResources, MeditationSessions
+from models import db, User, MentalHealthResources, MeditationSessions, JournalEntries
+from datetime import datetime
 
 api = Blueprint('api', __name__)
 
@@ -53,7 +54,7 @@ def logout():
 
 #     return jsonify({"id": id,"email": user.email}), 200
 
-@api.route('/resource', methods=['GET'])
+@api.route('/resource', methods=['GET', 'POST'])
 def resource():
     get_resource=request.get_json()
     title=get_resource["title"]
@@ -68,7 +69,7 @@ def resource():
     db.session.commit()
     return jsonify(message='Your resource is ready.'), 200
 
-@api.route('/meditation', methods=['GET'])
+@api.route('/meditation', methods=['GET', 'POST'])
 def meditation():
     get_session=request.get_json()
     title=get_session["title"]
@@ -82,6 +83,28 @@ def meditation():
     db.session.add(new_session)
     db.session.commit()
     return jsonify(message='Your session is ready.'), 200
+
+@api.route('/journal', methods=['POST'])
+def journal_entries():
+    get_entry = request.get_json()
+    date = get_entry.get("date", None)
+    mood = get_entry.get("mood", None)
+    content = get_entry.get("content", None)
+
+    if not date:
+        return jsonify(message='Date is required'), 400
+
+    new_entry = JournalEntries(date=date, mood=mood, content=content)
+
+    try:
+        db.session.add(new_entry)
+        db.session.commit()
+        return jsonify(message='Your new entry is available'), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(message=str(e)), 500
+
+
 
 # @api.route('/journal', methods=['POST'])
 # def journal_entries():

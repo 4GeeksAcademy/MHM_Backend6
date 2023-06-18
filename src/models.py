@@ -18,23 +18,26 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
     
-# class JournalEntries (db.Model):
-#   __tablename__ = 'journal_entries'
-#   entry_id = db.Column(db.Integer, primary_key=True)
-#   date = db.Column(db.Date, nullable=False)
-#   mood = db.Column(db.String(255))
-#   content = db.Column(db.Text)
+from sqlalchemy import Column, Integer, String, Text, Date
 
-#   def __repr__(self):
-#     return f'<JournalEntries {self.date}>'
+class JournalEntries(db.Model):
+    __tablename__ = 'journal_entries'
+    entry_id = Column(Integer, primary_key=True)
+    date = Column(String(255), nullable=False)  # Change the column type to String
+    mood = Column(String(255))
+    content = Column(Text)
 
-#   def serialize(self):
-#     return {
-#       "entry_id": self.entry_id,
-#       "date": self.date,
-#       "mood": self.mood,
-#       "content": self.content
-#     }
+    def __repr__(self):
+        return f'<JournalEntries {self.date}>'
+
+    def serialize(self):
+        return {
+            "entry_id": self.entry_id,
+            "date": self.date,
+            "mood": self.mood,
+            "content": self.content
+        }
+
   
 class MentalHealthResources (db.Model):
   resource_id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +78,9 @@ class MeditationSessions (db.Model):
       "youtube_url": self.youtube_url
     }
   
+
+# Everything under this line is bonus material that we did not get to unfortunately
+
 # class SupportGroups (db.Model):
 #   __tablename__ = 'support_groups'
 #   group_id  = db.Column(db.Integer, primary_key=True)
