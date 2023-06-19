@@ -6,6 +6,8 @@ from datetime import datetime
 
 api = Blueprint('api', __name__)
 
+logged_in_emails = []
+
 @api.route('/signup', methods=['POST'])
 def signup():
     rb=request.get_json()
@@ -36,40 +38,40 @@ def login():
     if not email or not password:
         return jsonify({'message': 'Email and password are required'}), 400
 
-    # Assuming you're using SQLAlchemy to query the user from the database
     user = User.query.filter_by(email=email).first()
 
     if not user or user.password != password:
         return jsonify({'message': 'Invalid credentials'}), 401
+    
+    logged_in_emails.append(email)
 
     return jsonify({'message': 'Logged in successfully', 'email': user.email}), 200
 
-    
-# @api.route('/login', methods=['POST'])
-# def login():
-#     email = request.json.get("email")
-#     password = request.json.get("password")
+    #   access_token = create_access_token(identify=email)
+    #   return jsonify(access_token=access_token)
 
-#     user = User.query.filter_by(email=email).first()
-#     if not user or not user.check_password(password):
-#         return jsonify({"message": "Incorrect email or password"}), 401
-
-#     return jsonify({"message": "You have successfully logged in."}), 200
-    
-#         access_token = create_access_token(identify=email)
-#         return jsonify(access_token=access_token)
-
-@api.route('/logout', methods=['POST', 'GET'])
+@api.route('/logout', methods=['POST'])
 def logout():
-    return jsonify(message='User logged out successfully'), 200
+    get_logout = request.get_json()
+    email = get_logout["email"]
+
+    if not email:
+        return jsonify ({'message': 'Email is required'}), 400
+    
+    if email not in logged_in_emails:
+        return jsonify({'message': 'Email is not logged in'}), 401
+    
+    logged_in_emails.remove(email)
+
+    return jsonify({'message': 'Logged out successfully'}), 200
 
 # @api.route('/protected', methods=['GET'])
 # @jwt_required()
 # def protected():
 #     current_user_id = get_jwt_identify()
 #     user = User.query.get(current_user_id)
-
 #     return jsonify({"id": id,"email": user.email}), 200
+
 
 @api.route('/resource', methods=['GET', 'POST'])
 def resource():
