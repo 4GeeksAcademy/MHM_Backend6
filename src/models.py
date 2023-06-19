@@ -37,7 +37,6 @@ class JournalEntries(db.Model):
             "mood": self.mood,
             "content": self.content
         }
-
   
 class MentalHealthResources (db.Model):
   resource_id = db.Column(db.Integer, primary_key=True)
